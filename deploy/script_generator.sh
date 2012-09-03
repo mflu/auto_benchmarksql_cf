@@ -15,7 +15,7 @@ export JAVA_HOME=$driver_remote_in/$jdk_dir
 cd $driver_remote_in/$driver_name/run
 chmod +x ./loadData.sh
 ./runSQL.sh $remote_prop_dir/`basename $file_prefix` sqlTableDrops
-./runSQL.sh $remote_prop_dir/`basename $file_prefix` sqlTableCreates 
+./runSQL.sh $remote_prop_dir/`basename $file_prefix` sqlTableCreates
 ./runSQL.sh $remote_prop_dir/`basename $file_prefix` sqlIndexCreates
 EOF
 # generate the preload script
@@ -26,7 +26,7 @@ export JAVA_HOME=$driver_remote_in/$jdk_dir
 cd $driver_remote_in/$driver_name/run
 chmod +x ./loadData.sh
 rm -rf $remote_log_dir/`basename $file_prefix`.loadData.log
-./loadData.sh $remote_prop_dir/`basename $file_prefix` -w$load_warehouse -log$remote_log_dir/`basename $file_prefix`.loadData.log
+./loadData.sh $remote_prop_dir/`basename $file_prefix` -w$load_warehouse -f$load_scale_factor -log$remote_log_dir/`basename $file_prefix`.loadData.log
 EOF
 # generate the benchmark script
 benchmark_script=$file_prefix.benchmark.sh
