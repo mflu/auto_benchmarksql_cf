@@ -1,0 +1,6 @@
+client_num=2
+client_user=root
+client_password=ca\$hc0w
+client_rootpassword=ca\$hc0w
+deploy_driver=0
+deploy_jdk=0

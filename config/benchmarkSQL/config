@@ -1,0 +1,23 @@
+load_warehouse=1
+load_scale_factor=0.05
+# 25 == 25%
+load_delivery_weight=25
+load_cycle_time=1000
+load_time=1
+load_heavy=24
+load_medium=15
+load_light=6
+load_idle=0
+inst_num=10
+inst_heavy=3
+inst_medium=3
+inst_light=2
+inst_idle=2
+local_prop_dir=props
+local_script_dir=scripts
+remote_base_dir=/var/vcap/data
+remote_prop_dir=$remote_base_dir/props
+remote_script_dir=$remote_base_dir/scripts
+remote_log_dir=$remote_base_dir/logs
+mkdir -p $base_dir/var/$local_prop_dir
+mkdir -p $base_dir/var/$local_script_dir

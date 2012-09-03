@@ -1,0 +1,7 @@
+base_dir=/home/flu/cloudfoundry/density_tool
+platform=cloudfoundry
+source $base_dir/config/driver
+source $base_dir/config/client
+source $base_dir/config/server
+source $base_dir/config/$driver_name/config
+source $base_dir/config/cloudfoundry

@@ -1,0 +1,23 @@
+suggest_url=xx.yy.zz.kk.com
+target_url="http://api.$suggest_url"
+
+admin_user=foobar@vmware.com
+admin_pass=p
+
+service_type=postgresql
+# 0 or 1 == false or true
+service_wardenized=1
+
+user_prefix=performance
+user_passwd=p
+
+app_prefix="${service_type}_worker"
+
+# create necessary directories
+log_dir=$base_dir/var/logs
+token_dir=$base_dir/var/tokens
+mkdir -p $log_dir
+mkdir -p $token_dir
+
+remote_db=/var/vcap/store/${service_type}_node.db
+local_db=$base_dir/var/${service_type}_node.db

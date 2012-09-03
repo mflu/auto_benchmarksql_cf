@@ -1,0 +1,35 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    annoy (0.5.6)
+      highline (>= 1.5.0)
+    drydock (0.6.9)
+    highline (1.6.14)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-ssh (2.5.2)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    net-ssh-multi (1.1)
+      net-ssh (>= 2.1.4)
+      net-ssh-gateway (>= 0.99.0)
+    rye (0.9.7)
+      annoy
+      highline (>= 1.5.1)
+      net-scp (>= 1.0.2)
+      net-ssh (>= 2.0.13)
+      sysinfo (>= 0.7.3)
+    storable (0.8.9)
+    sysinfo (0.8.0)
+      drydock
+      storable
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  net-scp
+  net-ssh
+  net-ssh-gateway
+  net-ssh-multi
+  rye

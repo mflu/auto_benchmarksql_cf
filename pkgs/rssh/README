@@ -1,0 +1,4 @@
+bundle install
+bundle pack
+
+ruby with readline

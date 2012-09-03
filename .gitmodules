@@ -1,0 +1,3 @@
+[submodule "deploy/benchmarkSQL"]
+        path = deploy/benchmarkSQL
+        url = git://github.com/andl/benchmarkSQL.git
