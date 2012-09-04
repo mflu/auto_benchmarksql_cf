@@ -40,3 +40,11 @@ rm -rf $remote_log_dir/`basename $file_prefix`.benchmark/*
 ./runBenchmark.sh $remote_prop_dir/`basename $file_prefix` -w$load_warehouse -log$remote_log_dir/`basename $file_prefix`.benchmark -m$load_time -q$load_cycle_time -f$load_scale_factor -d$load_delivery_weight -t$load_t_num
 EOF
 
+report_script=$file_prefix.report.sh
+cat > $report_script << EOF
+#!/bin/bash
+export JAVA_HOME=$driver_remote_in/$jdk_dir
+cd $driver_remote_in/$driver_name/run
+chmod +x ./genReport.sh
+./genReport.sh $remote_log_dir/`basename $file_prefix`.benchmark | tee $remote_log_dir/`basename $file_prefix`.benchmark/report.txt
+EOF

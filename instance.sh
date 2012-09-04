@@ -16,7 +16,7 @@ for i in `seq 1 $number_of_users`; do
   vmc login --email $email --passwd $user_passwd --token-file $token
 
   app_name="${service_type}_worker_${i}"
-  vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token
+  vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
 
   svc=0
   if (( number_of_svc >= avg_num ))

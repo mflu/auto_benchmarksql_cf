@@ -20,6 +20,6 @@ then
     sleep $sleep_time
   fi
 else
-  echo "Usage: run.sh prepare|preload|benchmark|stop"
+  echo "Usage: run.sh prepare|preload|benchmark|report|stop"
 fi
 
