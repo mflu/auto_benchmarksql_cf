@@ -11,7 +11,7 @@ for i in `seq 1 $number_of_users`; do
   token="$token_dir/perform_instance_$i.token"
   email="${user_prefix}_${service_type}_instance_${i}@vmware.com"
   log_file="$log_dir/perform_instance_$i.log"
-
+  
   vmc add-user --email $email --passwd $user_passwd
   vmc login --email $email --passwd $user_passwd --token-file $token
 
@@ -27,8 +27,12 @@ for i in `seq 1 $number_of_users`; do
   fi
   for t in `seq 1 $svc`; do
     service_name="${service_type}_worker_service_${t}"
-    vmc create-service $service_type $service_name -n --token-file $token
-    vmc bind-service $service_name $app_name --token-file $token
+    ret=`vmc services | grep "$service_name |"`
+    if test -z "$ret"
+    then
+      vmc create-service $service_type $service_name -n --token-file $token
+      vmc bind-service $service_name $app_name --token-file $token
+    fi
   done
   vmc stop $app_name --token-file $token
   ((number_of_svc=number_of_svc - svc))
