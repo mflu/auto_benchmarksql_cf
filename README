@@ -9,4 +9,8 @@
 4) run deploy.sh
 5) run dispatch_load.sh
 6) run run.sh prepare|preload|benchmark
+7) run run.sh report
+8) run fetch_log.sh
+9) run parse_log.sh logs/$timestamp
+
   

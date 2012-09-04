@@ -16,8 +16,15 @@ then
   if test $action = "benchmark"
   then
     sleep_time=$((load_time * 60))
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password mkdir -p $remote_base_dir
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_upload $base_dir/dstat.sh $remote_base_dir/dstat.sh
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password chmod +x $remote_base_dir/dstat.sh
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password killall dstat
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password rm -rf $remote_base_dir/dstat.log
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/dstat.log $sleep_time
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/dstat.log $base_dir/dstat.log
   fi
 else
   echo "Usage: run.sh prepare|preload|benchmark|report|stop"
