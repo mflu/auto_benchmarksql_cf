@@ -1,4 +1,4 @@
 driver_name=benchmarkSQL
-driver_local_in=/home/flu/cloudfoundry/density_tool/deploy
+driver_local_in=/home/flu/cloudfoundry/auto_benchmarksql_cf/deploy
 driver_remote_in=/var/vcap/data
 jdk_dir=jdk1.6.0_35

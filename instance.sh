@@ -15,7 +15,7 @@ for i in `seq 1 $number_of_users`; do
   vmc add-user --email $email --passwd $user_passwd
   vmc login --email $email --passwd $user_passwd --token-file $token
 
-  app_name="${service_type}_worker_${i}"
+  app_name="${service_type}_${user_prefix}_worker_${i}"
   vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
 
   svc=0
@@ -30,7 +30,7 @@ for i in `seq 1 $number_of_users`; do
     ret=`vmc services | grep "$service_name |"`
     if test -z "$ret"
     then
-      vmc create-service $service_type $service_name -n --token-file $token
+      vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan
       vmc bind-service $service_name $app_name --token-file $token
     fi
   done

@@ -7,11 +7,16 @@ then
   echo "Execute action: $action"
   for ch in `cat $base_dir/config/client_nodes | grep -v '^$' | head -n $client_num`
   do
-    action_script="$remote_base_dir/${action}.sh"
-    ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password chmod +x $action_script
-    ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password ls -la $action_script
-    ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password chmod +x $remote_script_dir/*.sh
-    ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password /bin/bash $action_script
+    if test -e $base_dir/var/dist/$action/$ch -o $action = "stop"
+    then
+      action_script="$remote_base_dir/${action}.sh"
+      ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password chmod "+x $action_script; ls -la $action_script; chmod +x $remote_script_dir/*.sh"
+      #ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password ls -la $action_script
+      #ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password chmod +x $remote_script_dir/*.sh
+      ruby $base_dir/pkgs/rssh/rssh.rb $ch $client_user $client_password /bin/bash $action_script
+    else
+      echo "No action script for $ch"
+    fi
   done
   if test $action = "benchmark"
   then
@@ -24,7 +29,9 @@ then
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/dstat.log $sleep_time
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
-    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/dstat.log $base_dir/dstat.log
+    timestamp=`date +%s`
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/dstat.log $base_dir/dstat.$timestamp.csv
+    $0 report
   fi
 else
   echo "Usage: run.sh prepare|preload|benchmark|report|stop"

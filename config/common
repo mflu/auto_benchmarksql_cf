@@ -1,4 +1,4 @@
-base_dir=/home/flu/cloudfoundry/density_tool
+base_dir=/home/flu/cloudfoundry/auto_benchmarksql_cf
 platform=cloudfoundry
 source $base_dir/config/driver
 source $base_dir/config/client
