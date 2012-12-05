@@ -26,11 +26,12 @@ then
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password chmod +x $remote_base_dir/dstat.sh
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password killall dstat
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password rm -rf $remote_base_dir/dstat.log
-    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/dstat.log $sleep_time
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/metric.log $sleep_time
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
     timestamp=`date +%s`
-    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/dstat.log $base_dir/dstat.$timestamp.csv
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.dstat $base_dir/dstat.$timestamp.csv
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.iostat $base_dir/iostat.$timestamp.csv
     $0 report
   fi
 else
