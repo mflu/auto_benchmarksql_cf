@@ -30,7 +30,8 @@ for i in `seq 1 $number_of_users`; do
     ret=`vmc services | grep "$service_name |"`
     if test -z "$ret"
     then
-      vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan
+      # you should use private vmc client https://github.com/andl/vmc
+      vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan --version $service_version --v1
       vmc bind-service $service_name $app_name --token-file $token
     fi
   done

@@ -6,6 +6,7 @@ admin_pass=p
 
 service_type=postgresql
 service_plan=xxx
+service_version=yyy
 # 0 or 1 == false or true
 service_wardenized=1
 
