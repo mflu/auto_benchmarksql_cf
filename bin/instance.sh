@@ -1,6 +1,6 @@
 #!/bin/bash
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
 
 avg_num=16
 echo "start to create worker..."

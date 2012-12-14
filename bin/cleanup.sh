@@ -1,7 +1,6 @@
 #!/bin/bash
-
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
 
 vmc target $target_url
 vmc login --email $admin_user --passwd $admin_pass

@@ -1,6 +1,7 @@
 #!/bin/bash -x
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
+
 dist_dir=$base_dir/var/dist
 for action in prepare preload benchmark report
 do

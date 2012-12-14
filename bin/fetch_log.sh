@@ -1,7 +1,13 @@
 #!/bin/bash
-base_dir=`dirname $0`
-source $base_dir/config/common
-time_dir=`date +%s`
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
+
+if test -z "$1"
+then
+  time_dir=`date +%s`
+else
+  time_dir=$1
+fi
 mkdir -p $base_dir/logs/$time_dir
 for ch in `cat $base_dir/var/client_list`
 do
@@ -13,4 +19,4 @@ do
   fi
 done
 echo $base_dir/logs/$time_dir
-$base_dir/parse_log.sh $base_dir/logs/$time_dir
+$base_dir/bin/parse_log.sh $base_dir/logs/$time_dir

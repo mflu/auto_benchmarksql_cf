@@ -1,6 +1,7 @@
 #!/bin/bash
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
+
 log_dir=$1
 log_time=$((load_time * 60))
 s_type=$2

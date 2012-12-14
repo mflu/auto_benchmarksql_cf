@@ -1,6 +1,6 @@
 #!/bin/bash
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
 
 cat $base_dir/config/client_nodes | grep -v '^$' | head -n $client_num > $base_dir/var/client_list
 
@@ -32,11 +32,11 @@ ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_
 rm -rf $base_dir/var/$local_prop_dir/*
 rm -rf $base_dir/var/$local_script_dir/*
 # syncup prop file
-$base_dir/generate_config.sh
+$base_dir/bin/generate_config.sh
 ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password rm -rf $remote_prop_dir
 ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password dir_upload $base_dir/var/$local_prop_dir $driver_remote_in
 # syncup script file
-$base_dir/generate_script.sh
+$base_dir/bin/generate_script.sh
 ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password rm -rf $remote_script_dir
 ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password dir_upload $base_dir/var/$local_script_dir $driver_remote_in
 
