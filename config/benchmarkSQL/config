@@ -3,6 +3,7 @@ load_scale_factor=0.05
 # 25 == 25%
 load_delivery_weight=25
 load_cycle_time=1000
+preload_data_to_idle=0
 load_time=1
 load_heavy=24
 load_medium=15
