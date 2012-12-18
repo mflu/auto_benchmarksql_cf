@@ -1,6 +1,6 @@
 #!/bin/bash -x
-base_dir=`dirname $0`
-source $base_dir/config/common
+bin_dir=`dirname $0`
+source $bin_dir/../config/common
 
 idx=0
 
