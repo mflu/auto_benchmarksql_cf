@@ -3,7 +3,7 @@ bin_dir=`dirname $0`
 source $bin_dir/../config/common
 
 idx=0
-for inst_type in heavy meduim light idle
+for inst_type in heavy medium light idle
 do
   echo "Generate script file for instances with type: ${inst_type}"
   inst_type_var_name="inst_${inst_type}"
