@@ -29,6 +29,7 @@ then
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
     if test -z "$1"
+    then
       timestamp=`date +%s`
     else
       timestamp=$1
