@@ -17,7 +17,12 @@ service_version=ARGV[5]
 
 if File.exist?(local_db)
 if wardenized == 0
-  inst=`sqlite3 #{local_db} "select name,'5432',plan from vcap_services_postgresql_node_provisionedservices where version = '#{service_version}' limit 1 offset #{index}"`
+  if service_version == "9.0"
+    port = '5432'
+  else
+    port = '5433'
+  end
+  inst=`sqlite3 #{local_db} "select name, '#{port}', plan from vcap_services_postgresql_node_provisionedservices where version = '#{service_version}' limit 1 offset #{index}"`
 else
   inst=`sqlite3 #{local_db} "select name,port,plan from vcap_services_postgresql_node_wardenprovisionedservices where version = '#{service_version}' limit 1 offset #{index}"`
 end
