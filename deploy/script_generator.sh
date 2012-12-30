@@ -22,6 +22,8 @@ EOF
 if test "$file_type" != "idle" -o $preload_data_to_idle -eq 1
 then
 preload_script=$file_prefix.preload.sh
+if test "$file_type" != "idle"
+then
 cat > $preload_script << EOF
 #!/bin/bash
 export JAVA_HOME=$driver_remote_in/$jdk_dir
@@ -30,6 +32,14 @@ chmod +x ./loadData.sh
 rm -rf $remote_log_dir/`basename $file_prefix`.loadData.log
 ./loadData.sh $remote_prop_dir/`basename $file_prefix` -w$load_warehouse -f$load_scale_factor -log$remote_log_dir/`basename $file_prefix`.loadData.log
 EOF
+else
+cat > $preload_script <<EOF
+#!/bin/bash
+cd $driver_remote_in/idle_data
+rm -rf $remote_log_dir/`basename $file_prefix`.loadData.log
+bundle exec ruby ./load.rb $remote_prop_dir/`basename $file_prefix` $load_warehouse $load_scale_factor $remote_log_dir/`basename $file_prefix`.loadData.log
+EOF
+fi
 fi
 
 if test "$file_type" != "idle"

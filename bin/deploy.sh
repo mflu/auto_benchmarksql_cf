@@ -15,11 +15,15 @@ else
 	ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password ls -la $driver_remote_in/$driver_name
 fi
 
+ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password dir_upload $driver_local_in/idle_data $driver_remote_in
+ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password chmod +x $driver_remote_in/deploy.sh
+ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password $driver_remote_in/deploy.sh
+
 if test $deploy_jdk -eq 1
 then
         ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password mv $driver_remote_in/$jdk_dir $driver_remote_in/$jdk_dir.bak
         ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password rm -rf $driver_remote_in/$jdk_dir.bak
-	ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password file_upload $driver_local_in/$jdk_dir.tar.gz $driver_remote_in        
+	ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password file_upload $driver_local_in/$jdk_dir.tar.gz $driver_remote_in
         ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password tar xzvf $driver_remote_in/$jdk_dir.tar.gz -C $driver_remote_in
         ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password $driver_remote_in/$jdk_dir/bin/java -version
 else
