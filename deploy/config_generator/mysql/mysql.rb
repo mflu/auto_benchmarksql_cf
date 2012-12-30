@@ -14,7 +14,12 @@ service_version=ARGV[5]
 
 if File.exist?(local_db)
 if wardenized == 0
-  inst=`sqlite3 #{local_db} "select name,user,password,'3307',plan from vcap_services_mysql_node_provisioned_services where version = '#{service_version}' limit 1 offset #{index}"`
+  if service_version == "5.1"
+    port = '3306'
+  else
+    port = '3307'
+  end 
+  inst=`sqlite3 #{local_db} "select name,user,password,'#{port}',plan from vcap_services_mysql_node_provisioned_services where version = '#{service_version}' limit 1 offset #{index}"`
 else
   inst=`sqlite3 #{local_db} "select name,user,password,port,plan from vcap_services_mysql_node_warden_provisioned_services where version = '#{service_version}' limit 1 offset #{index}"`
 end
