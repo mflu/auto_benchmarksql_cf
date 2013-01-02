@@ -7,16 +7,19 @@ echo "start to create worker..."
 ((number_of_users=inst_num/avg_num + 1))
 number_of_svc=$inst_num
 for i in `seq 1 $number_of_users`; do
-  vmc login --email $admin_user --passwd $admin_pass
+  vmc login --email $admin_user --passwd $admin_pass --token-file $token_dir/admin.token
   token="$token_dir/perform_instance_$i.token"
   email="${user_prefix}_${service_type}_instance_${i}@vmware.com"
   log_file="$log_dir/perform_instance_$i.log"
-  
+
   vmc add-user --email $email --passwd $user_passwd
   vmc login --email $email --passwd $user_passwd --token-file $token
 
   app_name="${service_type}_${user_prefix}_worker_${i}"
-  vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
+  if test $use_default_user -eq 1
+  then
+    vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
+  fi
 
   svc=0
   if (( number_of_svc >= avg_num ))
@@ -32,7 +35,10 @@ for i in `seq 1 $number_of_users`; do
     then
       # you should use private vmc client https://github.com/andl/vmc
       vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan --version $service_version --v1
-      vmc bind-service $service_name $app_name --token-file $token
+      if test $use_default_user -eq 1
+      then
+        vmc bind-service $service_name $app_name --token-file $token
+      fi
     fi
   done
   vmc stop $app_name --token-file $token

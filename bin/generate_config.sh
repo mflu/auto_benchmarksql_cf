@@ -11,7 +11,7 @@ do
   for i in `seq 1 ${!inst_type_var_name}`
   do
     prop_file=$base_dir/var/$local_prop_dir/${service_type}.${inst_num}.${inst_type}.$i
-    ruby $base_dir/deploy/config_generator/${service_type}/${service_type}.rb $local_db $idx $prop_file $service_wardenized $server_host $service_version
+    ruby $base_dir/deploy/config_generator/${service_type}/${service_type}.rb $local_db $idx $prop_file $service_wardenized $server_host $service_version $use_default_user
     let idx++
   done
 done

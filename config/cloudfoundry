@@ -15,6 +15,8 @@ user_passwd=p
 
 app_prefix="${service_type}_worker"
 
+use_default_user=0
+
 # create necessary directories
 log_dir=$base_dir/var/logs
 token_dir=$base_dir/var/tokens
