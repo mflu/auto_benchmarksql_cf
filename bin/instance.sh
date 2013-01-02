@@ -16,7 +16,7 @@ for i in `seq 1 $number_of_users`; do
   vmc login --email $email --passwd $user_passwd --token-file $token
 
   app_name="${service_type}_${user_prefix}_worker_${i}"
-  if test $use_default_user -eq 1
+  if test $use_default_user -eq 0
   then
     vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
   fi
@@ -35,7 +35,7 @@ for i in `seq 1 $number_of_users`; do
     then
       # you should use private vmc client https://github.com/andl/vmc
       vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan --version $service_version --v1
-      if test $use_default_user -eq 1
+      if test $use_default_user -eq 0
       then
         vmc bind-service $service_name $app_name --token-file $token
       fi
