@@ -23,8 +23,10 @@ then
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password mkdir -p $remote_base_dir
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_upload $base_dir/bin/dstat.sh $remote_base_dir/dstat.sh
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password chmod +x $remote_base_dir/dstat.sh
-    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password killall dstat
-    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password rm -rf $remote_base_dir/dstat.log
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password "ps xa |grep dstat| awk '{print \$1}' | xargs kill"
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password killall iostat
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password rm -rf $remote_base_dir/metric.log.dstat
+    ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password rm -rf $remote_base_dir/metric.log.iostat
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/metric.log $sleep_time
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
