@@ -41,7 +41,10 @@ for i in `seq 1 $number_of_users`; do
       fi
     fi
   done
-  vmc stop $app_name --token-file $token
+  if test $use_default_user -eq 0
+  then
+    vmc stop $app_name --token-file $token
+  fi
   ((number_of_svc=number_of_svc - svc))
 done
 
