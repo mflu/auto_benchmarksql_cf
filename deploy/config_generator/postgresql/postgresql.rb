@@ -14,7 +14,7 @@ prop_file=ARGV[2]
 wardenized=ARGV[3].to_i
 server_host=ARGV[4]
 service_version=ARGV[5]
-use_default_user=ARGV[6]
+use_default_user=ARGV[6].to_i
 
 if File.exist?(local_db)
 if wardenized == 0
