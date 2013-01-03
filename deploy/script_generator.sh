@@ -37,7 +37,7 @@ cat > $preload_script <<EOF
 #!/bin/bash
 cd $driver_remote_in/idle_data
 rm -rf $remote_log_dir/`basename $file_prefix`.loadData.log
-/var/vcap/bosh/bin/bundle exec ruby ./load.rb $remote_prop_dir/`basename $file_prefix` $load_warehouse $load_scale_factor $remote_log_dir/`basename $file_prefix`.loadData.log
+/var/vcap/bosh/bin/bundle exec /var/vcap/bosh/bin/ruby ./load.rb $remote_prop_dir/`basename $file_prefix` $load_warehouse $load_scale_factor $remote_log_dir/`basename $file_prefix`.loadData.log
 EOF
 fi
 fi
