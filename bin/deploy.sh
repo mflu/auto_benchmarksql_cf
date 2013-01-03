@@ -16,8 +16,8 @@ else
 fi
 
 ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password dir_upload $driver_local_in/idle_data $driver_remote_in
-ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password chmod +x $driver_remote_in/deploy.sh
-ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password $driver_remote_in/deploy.sh
+ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password chmod +x $driver_remote_in/idle_data/deploy.sh
+ruby $base_dir/pkgs/rssh/rssh.rb $base_dir/var/client_list $client_user $client_password $driver_remote_in/idle_data/deploy.sh
 
 if test $deploy_jdk -eq 1
 then
