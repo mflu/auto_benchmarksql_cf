@@ -30,11 +30,11 @@ then
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password /bin/bash $remote_base_dir/dstat.sh $remote_base_dir/metric.log $sleep_time
     echo "Will sleep $sleep_time seconds to wait action to finish"
     sleep $sleep_time
-    if test -z "$1"
+    if test -z "$2"
     then
       timestamp=`date +%s`
     else
-      timestamp=$1
+      timestamp=$2
     fi
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.dstat $base_dir/dstat.$timestamp.csv
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.iostat $base_dir/iostat.$timestamp.csv
