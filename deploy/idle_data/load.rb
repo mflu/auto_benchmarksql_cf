@@ -48,7 +48,7 @@ client = nil
 begin
   case service_type
   when "mysql"
-    client = Mysql2::Client.new(:host => host, :user => user, :port => port, :password => password, :database => database)
+    client = Mysql2::Client.new(:host => host, :user => user, :port => port.to_i, :password => password, :database => database)
     client.query("Create table IF NOT EXISTS idle_data (data_value text)")
   when "postgresql" # pg
     client = PGconn.open(host, port, :dbname => database, :user => user, :password => password)
