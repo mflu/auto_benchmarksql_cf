@@ -48,13 +48,15 @@ client = nil
 begin
   case service_type
   when "mysql"
-    client = Mysql2::Client.new(:host => host, :user => user, :port => port.to_i, :password => password, :database => database)
-    client.query("Create table IF NOT EXISTS idle_data (data_value text)")
+    client = Mysql2::Client.new(:host => host, :username => user, :port => port.to_i, :password => password, :database => database)
+    client.query("Create table IF NOT EXISTS idle_data (data_value longtext)")
+    client.query("truncate table idle_data")
   when "postgresql" # pg
     client = PGconn.open(host, port, :dbname => database, :user => user, :password => password)
     client.query("create table idle_data (data_value text)") if client.query("select * from pg_catalog.pg_class where relname = 'idle_data';").num_tuples() < 1
+    client.query("truncate idle_data")
   end
-  client.query("truncate idle_data")
+  
   sleep 2
   logger.info("start to load to idle instance")
   (total_size / DEFAULT_SIZE).times do
