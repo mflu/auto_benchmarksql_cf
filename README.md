@@ -43,8 +43,8 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
   service_type=postgresql              # service type: postgresql or mysql
   service_plan=xxx                     # service plan
   service_version=yyy                  # postgresql: 9.0 or 9.1 mysql: 5.1 or 5.5
-  # 0 or 1 == false or true
-  service_wardenized=1                 # whether use warden
+                                          
+  service_wardenized=1                 # whether use warden, 0 or 1 == false or true
 
   user_prefix=performance              # prefix of test user's username
   user_passwd=p                        # test user's password
@@ -53,7 +53,6 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 
   use_default_user=0                   # whether use the default user? non-default user might be interrupted by long timer killer_
 
-  # create necessary directories
   log_dir=$base_dir/var/logs
   token_dir=$base_dir/var/tokens
   mkdir -p $log_dir
@@ -61,9 +60,8 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 
   remote_db=/var/vcap/store/${service_type}_node.db
   local_db=$base_dir/var/${service_type}_node.db
-</pre></code>
+</code></pre>
 + benchmarkSQL/config               # workload configuration
-
 <pre><code>
   load_warehouse                    # benchmarkSQL -w
   load_scale_factor                 # benchmakrSQL -f
@@ -88,7 +86,6 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
   remote_log_dir=$remote_base_dir/logs
   mkdir -p $base_dir/var/$local_prop_dir
   mkdir -p $base_dir/var/$local_script_dir
-
 </code></pre>
 
 + client_nodes                        # list IPs of VMs to run benchmarkSQL
@@ -111,32 +108,24 @@ jdk_dir                               # jdk tar package name (without tar.gz)
 + server                              # target service node's ip address
 
 ## Run Benchmark ##
-+ cd bin
-
-+ ./instance.sh                    # you could run cleanup.sh before to cleanup all provisioned instances)
-
-+ ./deploy.sh                      # deploy benchmarkSQL and JDK to client nodes
++ How to run benchmark
+<pre><code>
+  cd bin
+  ./instance.sh                    # you could run cleanup.sh before to cleanup all provisioned instances)
+  ./deploy.sh                      # deploy benchmarkSQL and JDK to client nodes
                                    # generate benchmark prop files and benchmark scripts of benchmarkSQL
-
-+ ./dispatch_load.sh               # copy prop files and benchmark scripts to client nodes
-
-+ ./run.sh prepare                 # recreate tables and indexes in all instances
+  ./dispatch_load.sh               # copy prop files and benchmark scripts to client nodes
+  ./run.sh prepare                 # recreate tables and indexes in all instances
                                    # non-blocking, you should use ./check_logs.sh prepare to check whether it is finished
-
-+ ./run.sh preload                 # preload data to instances
+  ./run.sh preload                 # preload data to instances
                                    # non-blocking, you should use ./check_logs.sh preload to check whether preloading is finished
-
-+ ./run.sh benchmark               # run the benchmark (blocking util the test is finished)
-
-+ ./run.sh report                  # generate report in each client node
-
-+ ./fetch_log.sh                   # fetch logs from client nodes, remember the timestamp
-
-+ ./parse_log.sh logs/$timestamp   # parse the log files to get the result report, the timestamp is 
-
+  ./run.sh benchmark               # run the benchmark (blocking util the test is finished)
+  ./run.sh report                  # generate report in each client node
+  ./fetch_log.sh                   # fetch logs from client nodes, remember the timestamp
+  ./parse_log.sh logs/$timestamp   # parse the log files to get the result report, the timestamp is 
+</code></pre>
 Tips: 
-  - you could speficy the timestamp when run ./run.sh benchmark $timestamp & ./fetch_log.sh $timestamp & ./parse_logs.sh logs/$timestamp
-
-## How to understand the result report
+  - you could speficy the timestamp when run ./run.sh benchmark $timestamp & ./fetch_log.sh $timestamp & ./parse_logs.sh logs/$timestam
++ How to understand the result report
 TODO
 
