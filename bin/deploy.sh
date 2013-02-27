@@ -1,6 +1,7 @@
 #!/bin/bash
 bin_dir=`dirname $0`
 source $bin_dir/../config/common
+driver_local_in=$base_dir/deploy
 
 cat $base_dir/config/client_nodes | grep -v '^$' | head -n $client_num > $base_dir/var/client_list
 
