@@ -5,6 +5,11 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 
 ## Install prerequisites ##
  + install dstat in your target service node: sudo apt-get install dstat
+ + clone the code to local machine: git clone git://github.com/mflu/auto_benchmarksql_cf.git
+ + clone the specified vmc to local machine: git clone git://github.com/andl/vmc.git
+ + install the specified vmc:
+ ++ gem build ./vmc.gemspec
+ ++ gem install ./gem install ./vmc-0.3.20.version.gem (TODO: fix this to support latest VMC)
  + download and put jdk1.6.0_35.tar.gz under deploy directory
  + install rssh/benchmarkSQL/sqlite3
 <pre><code>
@@ -35,7 +40,7 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 + cloudfoundry                         # cloudfoundry deployment
 <pre><code>
   suggest_url                          # deployment domain, such as cloudfoundry.com
-  target_url="http://api.$suggest_url" # e.g. api.cloudfoundry.com
+  target_url="http://api.$suggest_url" # e.g. api.cloudfoundry.com (TODO: not to support ccng, should fix this)
 
   admin_user=foobar@vmware.com         # admin user
   admin_pass=p                         # admin password
@@ -125,7 +130,7 @@ jdk_dir                               # jdk tar package name (without tar.gz)
   ./parse_log.sh logs/$timestamp   # parse the log files to get the result report, the timestamp is 
 </code></pre>
 Tips: 
-  - you could speficy the timestamp when run ./run.sh benchmark $timestamp & ./fetch_log.sh $timestamp & ./parse_logs.sh logs/$timestam
+  - you could speficy the timestamp when run ./run.sh benchmark $timestamp & ./fetch_log.sh $timestamp & ./parse_logs.sh logs/$timestamp
 + How to understand the result report
 TODO
 
