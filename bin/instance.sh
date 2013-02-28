@@ -10,14 +10,16 @@ echo "start to create worker..."
 number_of_svc=$inst_num
 
 # create test users
-ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_instance" -n $number_of_users -d $user_passwd
+ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_user" -n $number_of_users -d $user_passwd
+
+
+echo 1 | vmc login --email $admin_user --password $admin_pass
 
 for i in `seq 1 $number_of_users`; do
-  echo 1 | vmc login --email $admin_user --password $admin_pass
-  email="${user_prefix}_${service_type}_instance_${i}@vmware.com"
-  log_file="$log_dir/perform_instance_$i.log"
+  email="${user_prefix}_${service_type}_user_${i}@vmware.com"
+  log_file="$log_dir/perform_user_$i.log"
 
-  app_name="${service_type}_${user_prefix}_worker_${i}"
+  app_name="${service_type}_${user_prefix}_app_${i}"
   if test $use_default_user -eq 0
   then
     echo no | vmc push --name $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --memory 128 --instances 1 -u $email -f --no-start --framework sinatra --runtime ruby19 --host "$app_name.$suggest_url"
@@ -31,7 +33,7 @@ for i in `seq 1 $number_of_users`; do
     svc=$number_of_svc
   fi
   for t in `seq 1 $svc`; do
-    service_name="${service_type}_worker_service_${t}"
+    service_name="${app_name}_service_${t}"
     ret=`vmc services -u $email | grep "$service_name"`
     if test -z "$ret"
     then

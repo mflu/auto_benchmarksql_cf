@@ -7,7 +7,7 @@ avg_num=16
 number_of_svc=$inst_num
 
 echo "purge all the existing test user"
-ruby $base_dir/pkgs/cfharness/bin/cleanup.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_instance" -n $number_of_users -d $user_passwd
+ruby $base_dir/pkgs/cfharness/bin/cleanup.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_user" -n $number_of_users -d $user_passwd
 
 vmc target $target_url
 echo 1 | vmc login --email $admin_user --password $admin_pass
