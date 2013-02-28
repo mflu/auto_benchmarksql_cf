@@ -10,20 +10,23 @@ echo "start to create worker..."
 number_of_svc=$inst_num
 
 # create test users
-ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_user" -n $number_of_users -d $user_passwd
+
+namespace="${user_prefix}_${service_type}_${service_plan}_${service_version}"
+
+ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${namespace}_user" -n $number_of_users -d $user_passwd
 
 for i in `seq 1 $number_of_users`; do
-  email="${user_prefix}_${service_type}_user_${i}@vmware.com"
+  email="${namespace}_user${i}-harness_test@vmware.com"
 
-  pattern=`echo $email | sed s/\\./_/g | sed s/@/_at_/g`
+  pattern=`echo $email | sed s/\\\./_/g | sed s/@/_at_/g`
 
-  org="${user_prefix}_${service_type}_usercfharness_test_org-$pattern"
+  org="${namespace}_usercfharness_test_org-$pattern"
 
   vmc login --email $admin_user --password $admin_pass --org $org
 
   log_file="$log_dir/perform_user_$i.log"
 
-  app_name="${service_type}_${user_prefix}_app_${i}"
+  app_name="${namespace}_app_${i}"
   if test $use_default_user -eq 0
   then
     echo no | vmc push --name $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --memory 128 --instances 1 -u $email -f --no-start --framework sinatra --runtime ruby19 --host "$app_name.$suggest_url"
@@ -56,5 +59,6 @@ for i in `seq 1 $number_of_users`; do
 done
 
 # copy back the local db
+echo "copy back the local db file"
 ruby $base_dir/pkgs/rssh/rssh.rb $server_host  $server_user $server_password file_download $remote_db $local_db
 
