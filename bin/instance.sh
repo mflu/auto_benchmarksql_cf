@@ -12,11 +12,15 @@ number_of_svc=$inst_num
 # create test users
 ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_user" -n $number_of_users -d $user_passwd
 
-
-echo 1 | vmc login --email $admin_user --password $admin_pass
-
 for i in `seq 1 $number_of_users`; do
   email="${user_prefix}_${service_type}_user_${i}@vmware.com"
+
+  pattern=`echo $email | sed s/\\./_/g | sed s/@/_at_/g`
+
+  org="${user_prefix}_${service_type}_usercfharness_test_org-$pattern"
+
+  vmc login --email $admin_user --password $admin_pass --org $org
+
   log_file="$log_dir/perform_user_$i.log"
 
   app_name="${service_type}_${user_prefix}_app_${i}"

@@ -1,5 +1,5 @@
 suggest_url=xx.yy.zz.kk.com
-target_url="http://api.$suggest_url"
+target_url="http://ccng.$suggest_url"
 
 admin_user=foobar@vmware.com
 admin_pass=p
