@@ -4,6 +4,8 @@ target_url="http://api.$suggest_url"
 admin_user=foobar@vmware.com
 admin_pass=p
 
+uaa_cc_secret=fOZF5DMNDZIfCb9A
+
 service_type=postgresql
 service_plan=xxx
 service_version=yyy

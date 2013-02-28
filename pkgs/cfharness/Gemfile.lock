@@ -1,0 +1,83 @@
+GIT
+  remote: git://github.com/cloudfoundry/vmc-lib.git
+  revision: 0074219fa7d2bd206c0d8f07328c79ee18bf7d77
+  submodules: true
+  specs:
+    cfoundry (0.5.1.rc4)
+      cf-uaa-lib (~> 1.3.3)
+      multi_json (~> 1.3)
+      multipart-post (~> 1.1)
+      rubyzip (~> 0.9)
+
+GIT
+  remote: git://github.com/cloudfoundry/vmc-plugins.git
+  revision: 29e5ce311f9f1c580338d3bf414b2a167fc015e3
+  specs:
+    console-vmc-plugin (0.1.1)
+      tunnel-vmc-plugin (~> 0.2.0)
+    tunnel-vmc-plugin (0.2.0)
+      addressable (~> 2.2)
+      caldecott-client (~> 0.0.2)
+      cfoundry (~> 0.5.0)
+      rest-client (~> 1.6)
+      uuidtools (~> 2.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    addressable (2.3.3)
+    bson (1.8.2)
+    bson_ext (1.8.2)
+      bson (~> 1.8.2)
+    caldecott-client (0.0.2)
+      multi_json (~> 1.3)
+    cf-uaa-lib (1.3.3)
+      multi_json
+    cf-uaac (1.3.3)
+      cf-uaa-lib (>= 1.3.3, <= 1.3.3)
+      em-http-request (>= 1.0.0.beta.3)
+      eventmachine
+      highline
+      json_pure
+      launchy
+    cookiejar (0.3.0)
+    em-http-request (1.0.3)
+      addressable (>= 2.2.3)
+      cookiejar
+      em-socksify
+      eventmachine (>= 1.0.0.beta.4)
+      http_parser.rb (>= 0.5.3)
+    em-socksify (0.2.1)
+      eventmachine (>= 1.0.0.beta.4)
+    eventmachine (1.0.1)
+    highline (1.6.15)
+    http_parser.rb (0.5.3)
+    json_pure (1.7.7)
+    launchy (2.2.0)
+      addressable (~> 2.3)
+    mime-types (1.21)
+    multi_json (1.6.1)
+    multipart-post (1.2.0)
+    nokogiri (1.5.6)
+    rake (10.0.3)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    rubyzip (0.9.9)
+    uuidtools (2.1.3)
+    vcap_logging (0.1.4)
+      rake
+    yajl-ruby (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bson_ext
+  cf-uaac (= 1.3.3)
+  cfoundry!
+  console-vmc-plugin!
+  nokogiri
+  rest-client
+  tunnel-vmc-plugin!
+  vcap_logging (= 0.1.4)
+  yajl-ruby

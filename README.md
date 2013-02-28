@@ -44,11 +44,11 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 
   admin_user=foobar@vmware.com         # admin user
   admin_pass=p                         # admin password
+  uaa_cc_secret                        # cc's client_secret of uaa
 
   service_type=postgresql              # service type: postgresql or mysql
   service_plan=xxx                     # service plan
   service_version=yyy                  # postgresql: 9.0 or 9.1 mysql: 5.1 or 5.5
-                                          
   service_wardenized=1                 # whether use warden, 0 or 1 == false or true
 
   user_prefix=performance              # prefix of test user's username

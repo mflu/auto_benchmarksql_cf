@@ -6,19 +6,19 @@ avg_num=16
 echo "start to create worker..."
 ((number_of_users=inst_num/avg_num + 1))
 number_of_svc=$inst_num
+
+# create test users
+ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secret -e $admin_user -p $admin_pass -w "${user_prefix}_${service_type}_instance" -n $number_of_users -d $user_passwd
+
 for i in `seq 1 $number_of_users`; do
-  vmc login --email $admin_user --passwd $admin_pass --token-file $token_dir/admin.token
-  token="$token_dir/perform_instance_$i.token"
+  vmc login --email $admin_user --password $admin_pass
   email="${user_prefix}_${service_type}_instance_${i}@vmware.com"
   log_file="$log_dir/perform_instance_$i.log"
-
-  vmc add-user --email $email --passwd $user_passwd
-  vmc login --email $email --passwd $user_passwd --token-file $token
 
   app_name="${service_type}_${user_prefix}_worker_${i}"
   if test $use_default_user -eq 0
   then
-    vmc push $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --mem 128 -n --token-file $token --no-start
+    echo no | vmc push --name $app_name --path $base_dir/assets/sinatra/app_sinatra_service  --memory 128 --instances 1 -u $email -f --no-start --framework sinatra --runtime ruby19 --host "$app_name.$suggest_url"
   fi
 
   svc=0
@@ -30,20 +30,19 @@ for i in `seq 1 $number_of_users`; do
   fi
   for t in `seq 1 $svc`; do
     service_name="${service_type}_worker_service_${t}"
-    ret=`vmc services | grep "$service_name |"`
+    ret=`vmc services -u $email | grep "$service_name"`
     if test -z "$ret"
     then
-      # you should use private vmc client https://github.com/andl/vmc
-      vmc create-service $service_type $service_name -n --token-file $token --plan $service_plan --version $service_version --v1
+      vmc create-service --offering $service_type --name $service_name -u $email --plan $service_plan --version $service_version
       if test $use_default_user -eq 0
       then
-        vmc bind-service $service_name $app_name --token-file $token
+        vmc bind-service $service_name $app_name -u $email
       fi
     fi
   done
   if test $use_default_user -eq 0
   then
-    vmc stop $app_name --token-file $token
+    vmc stop $app_name -u $email
   fi
   ((number_of_svc=number_of_svc - svc))
 done
