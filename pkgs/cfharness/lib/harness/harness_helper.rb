@@ -27,7 +27,7 @@ module CF::Harness
           cleanup_user_data(puser['email'], puser['passwd'])
           delete_user_account() if delete_user
         rescue => e
-          puts "#{e.message} #{e.backtrace.join('|')}"
+          puts "#{e.message}"
         end
       end
     end
