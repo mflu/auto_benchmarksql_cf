@@ -2,6 +2,8 @@
 bin_dir=`dirname $0`
 source $bin_dir/../config/common
 
+vmc target $target_url
+
 avg_num=16
 echo "start to create worker..."
 ((number_of_users=inst_num/avg_num + 1))

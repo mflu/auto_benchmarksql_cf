@@ -229,8 +229,6 @@ module CF::Harness
       lines
     end
 
-    private
-
     def get_logger
       VCAP::Logging.logger(File.basename($0))
     end
@@ -288,8 +286,6 @@ module CF::Harness
       "[#{date}]  #{time}\t#{request_id}  #{rest_method}\t-> #{code}\t#{url}"
     end
   end
-
-  private
 
   def is_user_admin?(email, passwd)
     if v1? && @client

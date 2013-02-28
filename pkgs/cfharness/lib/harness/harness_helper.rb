@@ -74,6 +74,8 @@ module CF::Harness
         if check_user_availability(user)
           puts "user #{email} already exists!"
           next
+        else
+          puts "user #{email} does not exist, will create it"
         end
         if session.v2?
           @uaa_cc_secret ||= get_uaa_cc_secret
