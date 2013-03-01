@@ -155,20 +155,24 @@ New-Order    0.451083    131.207        78.0871           33.9183
 33.9367
 1009.31
 911
-</code></pre>
+
 1st line is the header of the result.
+
 2nd line to 6th line: 
-1. for each kind of transaction, 2nd column is the weight (ratio) of a transaction type, you could use this column to check whether the workload is a real TPCC workload.
-2. for each kind of transaction, 3rd colum is the average response time (,s) of a transaction type. As you see, usually write-heavy operations (Delivery and New-Order) is time-consuming.
-3. The 4th column is global weighted average response time (ms)
-4. The 5th column is global throughput (tnx/sec)
+
++ for each kind of transaction, 2nd column is the weight (ratio) of a transaction type, you could use this column to check whether the workload is a real TPCC workload.
++ for each kind of transaction, 3rd colum is the average response time (,s) of a transaction type. As you see, usually write-heavy operations (Delivery and New-Order) is time-consuming.
++ The 4th column is global weighted average response time (ms)
++ The 5th column is global throughput (tnx/sec)
 
 The last three lines are: GlobalThroughput(tnx/sec), AvgCycleTime(ms) and tpmC (new order transactions per minute).
+
 Usually, we use global weighted average resposne time, throughput and tmpC as our benchmark result.
 
-<pre><code>
-   throughput ~ tmpC / 60 * 2 (if not, this is not a TPCC workload)
-   concurrency ~ throughput * AvgCycleTime /1000 (Little's Law), if specified concurrency > throughput * AvgCycleTime/1000, then client nodes meets bottleneck.
+  + throughput ~ tmpC / 60 * 2 (if not, this is not a TPCC workload)
+  
+  + concurrency ~ throughput * AvgCycleTime /1000 (Little's Law), if specified concurrency > throughput * AvgCycleTime/1000, then client nodes meets bottleneck.
+
 <code></pre>
 
 You could check the detailed result data in auto_benchmarksql_cf/logs/$timestamp
