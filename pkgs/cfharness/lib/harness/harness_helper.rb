@@ -10,7 +10,7 @@ module CF::Harness
 
     def check_user_availability(user)
       begin
-        puts user
+        puts "checking user #{user} availability, trying to login..."
         client = CF::Harness::CFSession.new(:email => user['email'],
                                              :passwd => user['passwd'],
                                              :target => @config['target'])
@@ -21,11 +21,10 @@ module CF::Harness
       return true
     end
 
-    def cleanup!(users=[], delete_user=false)
+    def cleanup!(users=[])
       users.each do |puser|
         begin
           cleanup_user_data(puser['email'], puser['passwd'])
-          delete_user_account() if delete_user
         rescue => e
           puts "#{e.message}"
         end
@@ -50,6 +49,49 @@ module CF::Harness
 
     def get_admin_user_passwd
       @config['admin']['passwd']
+    end
+
+    def create_push_app(user, app_name, app_manifest, opts={})
+      session = CF::Harness::CFSession.new(:email => user['email'],
+                                            :passwd => user['passwd'],
+                                            :target => @config['target'])
+      # check app fisrt
+      found_apps = session.apps.select do |app|
+        app.name == app_name
+      end
+
+      app = found_apps ? found_apps.first : nil
+
+      if app.nil? || opts[:update_app_if_exist]
+        app = session.app(app_name)
+        app.push(nil, app_manifest, opts[:check_start])
+        puts "app #{app_name} created"
+      else
+        puts "app #{app.name} already exists"
+      end
+      app
+    end
+
+    def create_bind_service(user, app, service_name, service_manifest, opts={})
+      raise "app is nil when binding service #{service_name}" unless app
+      session = CF::Harness::CFSession.new(:email => user['email'],
+                                            :passwd => user['passwd'],
+                                            :target => @config['target'])
+      found_services = session.services.select do |service|
+        service.name == service_name
+      end
+      service = found_services  ? found_services.first : nil
+      unless service
+        service = session.service(service_name)
+        service.create(service_manifest)
+        puts "service #{service_name} created"
+      else
+        puts "service #{service_name} already exists"
+      end
+
+      if opts[:bind]
+        app.bind(service, opts[:restart_app])
+      end
     end
 
     def create_users(users=[])
@@ -80,7 +122,7 @@ module CF::Harness
         if session.v2?
           @uaa_cc_secret ||= get_uaa_cc_secret
           uaa_url = format_target(@config['target']).gsub(/\/\/\w+/, '//uaa')
-          org_name = session.namespace + "cfharness_test_org-#{email.gsub(".", "_").gsub("@","_at_")}"
+          org_name = "#{email.gsub(".", "_").gsub("@","_at_")}_org"
           space_name = "cfharness_test_space"
           puts "v2: creating user #{email}"
           CCNGUserHelper.create_user(uaa_url, @uaa_cc_secret, @config['target'], @config['admin']['email'],
@@ -116,13 +158,13 @@ module CF::Harness
                                             :target => @config['target'])
       puts yellow("Ready to clean up for test user: #{session.email}")
 
-      services = session.client.service_instances
-      puts yellow("Begin to clean up services")
-      cleanup_data(services)
-
       apps = session.client.apps
       puts yellow("Begin to clean up apps")
       cleanup_data(apps)
+
+      services = session.client.service_instances
+      puts yellow("Begin to clean up services")
+      cleanup_data(services)
 
       if session.v2?
         routes = session.client.routes

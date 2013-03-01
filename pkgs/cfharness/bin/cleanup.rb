@@ -10,8 +10,11 @@ require "harness"
 
 config = {'admin' => {}}
 
-parallel_user_number = 0
+user_number = 0
 default_password = "password"
+total_service_inst_num = 0
+avg_num_per_user = 16
+
 
 optparse = OptionParser.new do|opts|
   opts.on( '-h', '--help', 'Display this screen' ) do
@@ -39,37 +42,35 @@ optparse = OptionParser.new do|opts|
     default_password = d_passwd
   end
 
-  opts.on('-w', '--namespace NAMESPACE', String,'namespace and username prefix') do |ns|
+  opts.on('-w', '--namespace NAMESPACE', String, 'namespace and username prefix') do |ns|
     config['namespace'] = ns
   end
 
-  opts.on('-n', '--num [NUM]', Numeric,'number of users') do |num|
-    parallel_user_number = num.to_i || 0
+  opts.on('-i', '--service SERVICE_MANIFEST', String, 'service manifest') do |str|
+    service_m = parse_m(str, true)
   end
+
+  opts.on('-n', '--instnum INST_NUM', Numeric, 'number of service instances for all users') do |num|
+    total_service_inst_num = num.to_i
+  end
+
 end
 
 
 begin
   optparse.parse!
 
-  puts config
-  #exit
-
-  #example: -t ccng.cf152.dev.las01.vcsops.com -s fOZF5DMNDZIfCb9A -e sre@vmware.com -p the_admin_pw -w testharnesslib -n 5
-  #target = "ccng.cf152.dev.las01.vcsops.com"
-  #uaa_cc_client_secret = "fOZF5DMNDZIfCb9A"
-  #admin_email = "sre@vmware.com"
-  #admin_passwd = "the_admin_pw"
-  #namespace = "testharnesslib"
+  user_num = total_service_inst_num/avg_num_per_user + (total_service_inst_num % avg_num_per_user == 0 ? 0 : 1)
 
   users = []
-  parallel_user_number.times do |i|
-    users << {"email" => "#{config['namespace']}#{i+1}-harness_test@vmware.com", "passwd" => "#{default_password}"}
-  end
+  remain_num = total_service_inst_num
 
   CF::Harness::HarnessHelper.set_config(config)
-
-  CF::Harness::HarnessHelper.cleanup!(users)
+  user_num.times do |i|
+    user = {"email" => "#{config['namespace']}#{i}@vmware.com", "passwd" => "#{default_password}"}
+    CF::Harness::HarnessHelper.cleanup!([user])
+    remain_num = total_service_inst_num - avg_num_per_user
+  end
 rescue => e
   puts "error: #{e} #{e.backtrace.join('|')}"
 end

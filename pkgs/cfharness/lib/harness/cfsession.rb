@@ -66,6 +66,12 @@ module CF::Harness
       User.new(@client.register(email, password), self)
     end
 
+    def app(name, prefix = '', domain=nil, require_namespace=false)
+      app = @client.app
+      app.name = "#{prefix}#{require_namespace ? @namespace : ''}#{name}"
+      App.new(app, self, domain)
+    end
+
     def apps
       @client.apps.collect {|app| App.new(app, self)}
     end
@@ -74,7 +80,7 @@ module CF::Harness
       @client.service_instances.collect {|service| Service.new(service, self)}
     end
 
-    def service(name, require_namespace=true)
+    def service(name, require_namespace=false)
       instance = @client.service_instance
       instance.name = require_namespace ? "#{@namespace}#{name}" : name
       CF::Harness::Service.new(instance, self)

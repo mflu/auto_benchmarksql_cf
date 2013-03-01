@@ -12,6 +12,8 @@ end
 require "harness/color_helper"
 require "harness/harness_helper"
 require "harness/cfsession"
+require "harness/app"
+require "harness/service"
 require "harness/user"
 require "harness/ccng_user_helper"
 

@@ -8,10 +8,26 @@ $:.unshift(File.expand_path("../../lib", __FILE__))
 
 require "harness"
 
+def parse_m(str, key_symbol=false)
+  h = {}
+  str.split(",").each do |x|
+    k, v = x.split(':')
+    key = key_symbol ? k.to_sym : k
+    h[key] = v
+  end
+  h
+end
+
 config = {'admin' => {}}
 
-parallel_user_number = 0
+user_number = 0
 default_password = "password"
+push_app = false
+push_app_m = {}
+service_m = {}
+total_service_inst_num = 0
+avg_num_per_user = 16
+
 
 optparse = OptionParser.new do|opts|
   opts.on( '-h', '--help', 'Display this screen' ) do
@@ -39,38 +55,57 @@ optparse = OptionParser.new do|opts|
     default_password = d_passwd
   end
 
-  opts.on('-w', '--namespace NAMESPACE', String,'namespace and username prefix') do |ns|
+  opts.on('-w', '--namespace NAMESPACE', String, 'namespace and username prefix') do |ns|
     config['namespace'] = ns
   end
 
-  opts.on('-n', '--num [NUM]', Numeric,'number of users') do |num|
-    parallel_user_number = num.to_i || 0
+  opts.on('-x', '--push', 'whenther to push an application') do
+    push_app = true
   end
+
+  opts.on('-a', '--app APP_MANIFEST', String, 'application manifest') do |str|
+    puts str
+    push_app_m = parse_m(str)
+  end
+
+  opts.on('-i', '--service SERVICE_MANIFEST', String, 'service manifest') do |str|
+    service_m = parse_m(str, true)
+  end
+
+  opts.on('-n', '--instnum INST_NUM', Numeric, 'number of service instances for all users') do |num|
+    total_service_inst_num = num.to_i
+  end
+
 end
 
 
 begin
-
   optparse.parse!
 
-  #puts config
-  #exit
-
-  #example: -t ccng.cf152.dev.las01.vcsops.com -s fOZF5DMNDZIfCb9A -e sre@vmware.com -p the_admin_pw -w testharnesslib -n 5
-  #target = "ccng.cf152.dev.las01.vcsops.com"
-  #uaa_cc_client_secret = "fOZF5DMNDZIfCb9A"
-  #admin_email = "sre@vmware.com"
-  #admin_passwd = "the_admin_pw"
-  #namespace = "testharnesslib"
+  user_num = total_service_inst_num/avg_num_per_user + (total_service_inst_num % avg_num_per_user == 0 ? 0 : 1)
 
   users = []
-  parallel_user_number.times do |i|
-    users << {"email" => "#{config['namespace']}#{i+1}-harness_test@vmware.com", "passwd" => "#{default_password}"}
-  end
+  remain_num = total_service_inst_num
 
   CF::Harness::HarnessHelper.set_config(config)
-  CF::Harness::HarnessHelper.create_users(users)
-#  CF::Harness::HarnessHelper.cleanup!(users)
+  user_num.times do |i|
+    user = {"email" => "#{config['namespace']}#{i}@vmware.com", "passwd" => "#{default_password}"}
+    CF::Harness::HarnessHelper.create_users([user])
+
+    app_name = "#{config['namespace']}_app#{i}"
+    push_app_m['no_start'] = true
+    push_app_m['name'] = app_name
+
+    app = CF::Harness::HarnessHelper.create_push_app(user, app_name, push_app_m, :update_app_if_exist => false, :check_start => false) if push_app
+    sleep 2
+    service_num = remain_num >= avg_num_per_user ? avg_num_per_user : remain_num
+    service_num.times do |t|
+      service_name = "#{app_name}_service#{t}"
+      service_m[:name] = service_name
+      CF::Harness::HarnessHelper.create_bind_service(user, app, service_name, service_m, :bind => push_app, :restart_app => false)
+    end
+    remain_num = total_service_inst_num - avg_num_per_user
+  end
 rescue => e
   puts "error: #{e} #{e.backtrace.join('|')}"
 end
