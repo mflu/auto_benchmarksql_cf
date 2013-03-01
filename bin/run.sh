@@ -39,7 +39,7 @@ then
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.dstat $base_dir/dstat.$timestamp.csv
     ruby $base_dir/pkgs/rssh/rssh.rb $server_host $server_user $server_password file_download $remote_base_dir/metric.log.iostat $base_dir/iostat.$timestamp.csv
     $0 report
-    $bin_dir/fetch_logs.sh $timestamp
+    $bin_dir/fetch_log.sh $timestamp
     mkdir -p $base_dir/logs/$timestamp
     mv $base_dir/*.$timestamp.csv $base_dir/logs/$timestamp
   fi

@@ -18,7 +18,7 @@ rm -rf result_tnx.log
 rm -rf result_ct.log
 rm -rf result_tmpc.log
 
-echo "name,totalRT,avgRT,totalTnx,tnxW" result.log
+echo "name   TnxWeight   TnxavgRT(ms)   GlobalAvgRT(ms)   Throughput(Tnx/sec)"
 for ch in `cat $base_dir/var/client_list`
 do
   log_pak=$ch.logs.tar.gz

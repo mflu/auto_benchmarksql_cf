@@ -6,14 +6,13 @@ Scripts to drive [benchmarkSQL](https://github.com/andl/benchmarkSQL) to stress 
 ## Install prerequisites ##
  + install dstat in your target service node: sudo apt-get install dstat
  + clone the code to local machine: git clone git://github.com/mflu/auto_benchmarksql_cf.git
- + clone the specified vmc to local machine
  + install the specified vmc when using the v0.1 (see tags) which only works with legacy CC (v1) + services/services_ng
 <pre><code>
    git clone git://github.com/andl/vmc.git
    gem build ./vmc.gemspec
    gem install ./gem install ./vmc-0.3.20.version.gem 
 </code></pre>
- + OR, if you use v0.2+, you could use latest vmc:
+ + OR, if you use v0.2+, you could just use latest vmc (optional)
 <pre><code>
  gem install vmc --pre
 </code></pre>
@@ -145,6 +144,33 @@ Tips:
    ./parse_logs.sh logs/$timestamp
 </code></pre>
 + How to understand the result report
+example:
+<pre><code>
+name         TnxWeight   TnxavgRT(ms)   GlobalAvgRT(ms)   Throughput(Tnx/sec)
+Order-Status 0.039998    35.4091        78.0871           33.9183
+Payment      0.432165    19.4486        78.0871           33.9183
+Stock-Level  0.039015    99.4736        78.0871           33.9183
+Delivery     0.0377377   137.784        78.0871           33.9183
+New-Order    0.451083    131.207        78.0871           33.9183
+33.9367
+1009.31
+911
+</code></pre>
+1st line is the header of the result.
+2nd line to 6th line: 
+1. for each kind of transaction, 2nd column is the weight (ratio) of a transaction type, you could use this column to check whether the workload is a real TPCC workload.
+2. for each kind of transaction, 3rd colum is the average response time (,s) of a transaction type. As you see, usually write-heavy operations (Delivery and New-Order) is time-consuming.
+3. The 4th column is global weighted average response time (ms)
+4. The 5th column is global throughput (tnx/sec)
 
-TODO
+The last three lines are: GlobalThroughput(tnx/sec), AvgCycleTime(ms) and tpmC (new order transactions per minute).
+Usually, we use global weighted average resposne time, throughput and tmpC as our benchmark result.
 
+<pre><code>
+   throughput ~ tmpC / 60 * 2 (if not, this is not a TPCC workload)
+   concurrency ~ throughput * AvgCycleTime /1000 (Little's Law), if specified concurrency > throughput * AvgCycleTime/1000, then client nodes meets bottleneck.
+<code></pre>
+
+You could check the detailed result data in auto_benchmarksql_cf/logs/$timestamp
+
+You could also find the system metrics in dstat.log in the same directory, you could use the file to calculate the node's health value.
