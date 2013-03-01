@@ -146,6 +146,7 @@ Tips:
 + How to understand the result report
 example:
 <pre><code>
+------------------------------------------------------------------------------
 name         TnxWeight   TnxavgRT(ms)   GlobalAvgRT(ms)   Throughput(Tnx/sec)
 Order-Status 0.039998    35.4091        78.0871           33.9183
 Payment      0.432165    19.4486        78.0871           33.9183
@@ -155,26 +156,17 @@ New-Order    0.451083    131.207        78.0871           33.9183
 33.9367
 1009.31
 911
-
-1st line is the header of the result.
-
-2nd line to 6th line: 
-
-+ for each kind of transaction, 2nd column is the weight (ratio) of a transaction type, you could use this column to check whether the workload is a real TPCC workload.
-+ for each kind of transaction, 3rd colum is the average response time (,s) of a transaction type. As you see, usually write-heavy operations (Delivery and New-Order) is time-consuming.
-+ The 4th column is global weighted average response time (ms)
-+ The 5th column is global throughput (tnx/sec)
-
-The last three lines are: GlobalThroughput(tnx/sec), AvgCycleTime(ms) and tpmC (new order transactions per minute).
-
-Usually, we use global weighted average resposne time, throughput and tmpC as our benchmark result.
-
-  + throughput ~ tmpC / 60 * 2 (if not, this is not a TPCC workload)
-  
-  + concurrency ~ throughput * AvgCycleTime /1000 (Little's Law), if specified concurrency > throughput * AvgCycleTime/1000, then client nodes meets bottleneck.
-
+-------------------------------------------------------------------------------
 <code></pre>
 
-You could check the detailed result data in auto_benchmarksql_cf/logs/$timestamp
-
-You could also find the system metrics in dstat.log in the same directory, you could use the file to calculate the node's health value.
+  1st line is the header of the result.
+  2nd line to 6th line: 
+  + for each kind of transaction, 2nd column is the weight (ratio) of a transaction type, you could use this column to check whether the workload is a real TPCC workload.
+  + for each kind of transaction, 3rd colum is the average response time (,s) of a transaction type. As you see, usually write-heavy operations (Delivery and New-Order) is time-consuming.
+  + The 4th column is global weighted average response time (ms)
+  + The 5th column is global throughput (tnx/sec)
+  The last three lines are: GlobalThroughput(tnx/sec), AvgCycleTime(ms) and tpmC (new order transactions per minute).
+  Usually, we use global weighted average resposne time, throughput and tmpC as our benchmark result.
+  + throughput ~ tmpC / 60 * 2 (if not, this is not a TPCC workload)
+  + concurrency ~ throughput * AvgCycleTime /1000 (Little's Law), if specified concurrency > throughput * AvgCycleTime/1000, then client nodes meets bottleneck.
+  You could check the detailed result data in auto_benchmarksql_cf/logs/$timestamp and find the system metrics in dstat.log in the same directory, you could use the file to calculate the node's health value.
