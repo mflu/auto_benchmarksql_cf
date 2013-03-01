@@ -98,13 +98,14 @@ begin
 
     app = CF::Harness::HarnessHelper.create_push_app(user, app_name, push_app_m, :update_app_if_exist => false, :check_start => false) if push_app
     sleep 2
-    service_num = remain_num >= avg_num_per_user ? avg_num_per_user : remain_num
+    service_num = (remain_num >= avg_num_per_user) ? avg_num_per_user : remain_num
+    puts "will create #{service_num} service instances..."
     service_num.times do |t|
       service_name = "#{app_name}_service#{t}"
       service_m[:name] = service_name
       CF::Harness::HarnessHelper.create_bind_service(user, app, service_name, service_m, :bind => push_app, :restart_app => false)
     end
-    remain_num = total_service_inst_num - avg_num_per_user
+    remain_num = remain_num - avg_num_per_user
   end
 rescue => e
   puts "error: #{e} #{e.backtrace.join('|')}"

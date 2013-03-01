@@ -17,4 +17,5 @@ ruby $base_dir/pkgs/cfharness/bin/create_users.rb -t $target_url -s $uaa_cc_secr
 
 # copy back the local db
 echo "copy back the local db file"
+sed -i "/^$server_host /d" ~/.ssh/known_hosts
 ruby $base_dir/pkgs/rssh/rssh.rb $server_host  $server_user $server_password file_download $remote_db $local_db

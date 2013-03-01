@@ -63,13 +63,11 @@ begin
   user_num = total_service_inst_num/avg_num_per_user + (total_service_inst_num % avg_num_per_user == 0 ? 0 : 1)
 
   users = []
-  remain_num = total_service_inst_num
 
   CF::Harness::HarnessHelper.set_config(config)
   user_num.times do |i|
     user = {"email" => "#{config['namespace']}#{i}@vmware.com", "passwd" => "#{default_password}"}
     CF::Harness::HarnessHelper.cleanup!([user])
-    remain_num = total_service_inst_num - avg_num_per_user
   end
 rescue => e
   puts "error: #{e} #{e.backtrace.join('|')}"
