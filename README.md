@@ -1,24 +1,23 @@
 auto_benchmarksql_cf
 ====================
 
-Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
+Scripts to drive [benchmarkSQL](https://github.com/andl/benchmarkSQL) to stress single postgresql/mysql service node.
 
 ## Install prerequisites ##
  + install dstat in your target service node: sudo apt-get install dstat
  + clone the code to local machine: git clone git://github.com/mflu/auto_benchmarksql_cf.git
  + clone the specified vmc to local machine
- + install the specified vmc when using the v0.1 (see tags)
+ + install the specified vmc when using the v0.1 (see tags) which only works with legacy CC (v1) + services/services_ng
 <pre><code>
    git clone git://github.com/andl/vmc.git
    gem build ./vmc.gemspec
    gem install ./gem install ./vmc-0.3.20.version.gem 
 </code></pre>
- + OR, install the latest vmc when using the > v0.1
+ + OR, if you use v0.2+, you could use latest vmc:
 <pre><code>
  gem install vmc --pre
 </code></pre>
  + download and put jdk1.6.0_35.tar.gz under deploy directory
-
  + install rssh/benchmarkSQL/sqlite3
 <pre><code>
   cd pkgs/rssh
@@ -51,23 +50,23 @@ Scripts to drive benchmarkSQL to stress single postgresql/mysql service node.
 + cloudfoundry                         # cloudfoundry deployment
 <pre><code>
   suggest_url                          # deployment domain, such as cloudfoundry.com
-  target_url="http://api.$suggest_url" # e.g. api.cloudfoundry.com (TODO: not to support ccng, should fix this)
+  target_url="http://ccng.$suggest_url" # e.g. api.cloudfoundry.com
 
-  admin_user=foobar@vmware.com         # admin user
-  admin_pass=p                         # admin password
+  admin_user                           # admin user
+  admin_pass                           # admin password
   uaa_cc_secret                        # cc's client_secret of uaa
 
-  service_type=postgresql              # service type: postgresql or mysql
-  service_plan=xxx                     # service plan
-  service_version=yyy                  # postgresql: 9.0 or 9.1 mysql: 5.1 or 5.5
-  service_wardenized=1                 # whether use warden, 0 or 1 == false or true
+  service_type                         # service type: postgresql or mysql
+  service_plan                         # service plan
+  service_version                      # postgresql: 9.0 or 9.1 mysql: 5.1 or 5.5
+  service_wardenized                   # whether use warden, 0 or 1 == false or true
 
-  user_prefix=performance              # prefix of test user's username
-  user_passwd=p                        # test user's password
+  user_prefix                          # prefix of test user/app/service's name, any string
+  user_passwd                          # test user's password
 
-  app_prefix="${service_type}_worker"  # prefix of test app's name
+  app_prefix="${service_type}_worker"  # discarded prefix of test app's name, WON'T BE USED, will be removed soon
 
-  use_default_user=0                   # whether use the default user? non-default user might be interrupted by long timer killer_
+  use_default_user                     # 0 or 1, whether use the default user?, using non-default user, queries/transactions might be interrupted by long timer killer_
 
   log_dir=$base_dir/var/logs
   token_dir=$base_dir/var/tokens
@@ -128,8 +127,8 @@ jdk_dir                               # jdk tar package name (without tar.gz)
 <pre><code>
   cd bin
   ./instance.sh                    # you could run cleanup.sh before to cleanup all provisioned instances)
-  ./deploy.sh                        # deploy benchmarkSQL and JDK to client nodes
-                                   # generate benchmark prop files and benchmark scripts of benchmarkSQL
+  ./deploy.sh                      # deploy benchmarkSQL and JDK to client nodes
+                                     # generate benchmark prop files and benchmark scripts of benchmarkSQL
   ./dispatch_load.sh               # copy prop files and benchmark scripts to client nodes
   ./run.sh prepare                 # recreate tables and indexes in all instances
                                      # non-blocking, you should use ./check_logs.sh prepare to check whether it is finished
