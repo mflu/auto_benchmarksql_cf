@@ -15,8 +15,6 @@ service_wardenized=1
 user_prefix=performance
 user_passwd=p
 
-app_prefix="${service_type}_worker"
-
 use_default_user=0
 
 # create necessary directories

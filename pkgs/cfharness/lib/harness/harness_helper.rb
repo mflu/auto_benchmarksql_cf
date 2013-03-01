@@ -73,7 +73,7 @@ module CF::Harness
     end
 
     def create_bind_service(user, app, service_name, service_manifest, opts={})
-      raise "app is nil when binding service #{service_name}" unless app
+      raise "app is nil when binding service #{service_name}" if app.nil? && opts[:bind] 
       session = CF::Harness::CFSession.new(:email => user['email'],
                                             :passwd => user['passwd'],
                                             :target => @config['target'])

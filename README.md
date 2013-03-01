@@ -64,8 +64,6 @@ Scripts to drive [benchmarkSQL](https://github.com/andl/benchmarkSQL) to stress 
   user_prefix                          # prefix of test user/app/service's name, any string
   user_passwd                          # test user's password
 
-  app_prefix="${service_type}_worker"  # discarded prefix of test app's name, WON'T BE USED, will be removed soon
-
   use_default_user                     # 0 or 1, whether use the default user?, using non-default user, queries/transactions might be interrupted by long timer killer_
 
   log_dir=$base_dir/var/logs
