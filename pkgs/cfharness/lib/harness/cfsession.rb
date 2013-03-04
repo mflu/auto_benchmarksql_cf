@@ -25,7 +25,7 @@ module CF::Harness
       @log = get_logger
       @namespace = get_namespace(options[:namespace])
       login
-      check_privilege(options[:admin]) unless v2?
+      # check_privilege(options[:admin]) unless v2?
     end
 
     def inspect

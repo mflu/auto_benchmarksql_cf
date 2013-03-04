@@ -128,7 +128,7 @@ module CF::Harness
           CCNGUserHelper.create_user(uaa_url, @uaa_cc_secret, @config['target'], @config['admin']['email'],
                                      @config['admin']['passwd'], email, passwd, org_name, space_name)
         else
-          user = session.user(email)
+          user = session.user(email, :require_namespace => false)
           user.create(passwd)
         end
         puts "create user: #{yellow(email)}"
